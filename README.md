@@ -9,7 +9,7 @@ Script automatizado para configurar meu ambiente de desenvolvimento no WSL (Ubun
 | **Sistema** | git, curl, wget, build-essential e dependencias |
 | **Shell** | Zsh, Oh My Zsh, plugins (autosuggestions, syntax-highlighting, autocomplete, you-should-use) |
 | **CLI modernas** | eza, zoxide, Starship |
-| **Node.js** | NVM + Node LTS + PNPM (via corepack) |
+| **Node.js** | NVM + Node LTS + PNPM (via corepack) + Bun |
 | **Java** | Microsoft OpenJDK 17 |
 | **Python** | Python 3 + uv (gerenciador moderno) |
 | **Docker** | Docker Engine |
@@ -57,6 +57,7 @@ Instala compiladores e libs necessarias para NVM, Python, etc.
 - Instala NVM v0.40.1
 - Instala Node.js LTS e define como padrao
 - Ativa PNPM via corepack
+- Instala [Bun](https://bun.sh) — runtime JS ultrarapido
 
 ### 4. Java (OpenJDK 17)
 Instala Microsoft OpenJDK 17 nativo no Linux (nao depende do Windows).

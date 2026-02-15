@@ -142,6 +142,12 @@ if should_install "NVM + Node.js + PNPM"; then
     corepack prepare pnpm@latest --activate
   fi
   ok "PNPM $(pnpm -v) instalado"
+
+  log "Instalando Bun..."
+  if ! command -v bun &>/dev/null; then
+    curl -fsSL https://bun.sh/install | bash
+  fi
+  ok "Bun $(~/.bun/bin/bun -v 2>/dev/null || echo 'instalado') pronto"
 fi
 
 # -----------------------------------------------
