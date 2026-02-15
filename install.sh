@@ -300,24 +300,43 @@ if should_install "Ngrok"; then
 fi
 
 # -----------------------------------------------
-# 9. Android SDK tools (via Windows — WSL config)
+# 9. Android SDK (nativo no Linux/WSL)
 # -----------------------------------------------
-if should_install "Android SDK config (WSL -> Windows)"; then
-  log "Configurando Android SDK..."
+if should_install "Android SDK (Linux nativo)"; then
+  log "Instalando Android SDK no Linux..."
 
-  WIN_USER=$(cmd.exe /C "echo %USERNAME%" 2>/dev/null | tr -d '\r' || echo "")
-  if [ -n "$WIN_USER" ]; then
-    ANDROID_SDK="/mnt/c/Users/$WIN_USER/AppData/Local/Android/Sdk"
-    if [ -d "$ANDROID_SDK" ]; then
-      ok "Android SDK detectado em $ANDROID_SDK"
-      echo "  As variaveis ANDROID_HOME ja estao no .zshrc"
-    else
-      warn "Android SDK nao encontrado em $ANDROID_SDK"
-      warn "Instale o Android Studio no Windows primeiro"
-    fi
-  else
-    warn "Nao foi possivel detectar o usuario Windows"
+  ANDROID_SDK="$HOME/Android/Sdk"
+  mkdir -p "$ANDROID_SDK"
+
+  # cmdline-tools
+  if [ ! -d "$ANDROID_SDK/cmdline-tools/latest" ]; then
+    log "Baixando command-line tools..."
+    CMDLINE_URL="https://dl.google.com/android/repository/commandlinetools-linux-11076708_latest.zip"
+    wget -q "$CMDLINE_URL" -O /tmp/cmdline-tools.zip
+    mkdir -p "$ANDROID_SDK/cmdline-tools"
+    unzip -q /tmp/cmdline-tools.zip -d "$ANDROID_SDK/cmdline-tools"
+    mv "$ANDROID_SDK/cmdline-tools/cmdline-tools" "$ANDROID_SDK/cmdline-tools/latest"
+    rm /tmp/cmdline-tools.zip
   fi
+
+  export ANDROID_HOME="$ANDROID_SDK"
+  export PATH="$PATH:$ANDROID_HOME/cmdline-tools/latest/bin"
+
+  # Aceitar licencas
+  yes | sdkmanager --licenses > /dev/null 2>&1 || true
+
+  # Instalar componentes essenciais
+  log "Instalando platform-tools, build-tools e platform..."
+  sdkmanager "platform-tools" "build-tools;36.0.0" "platforms;android-36" 2>&1 | tail -1
+
+  # NDK (necessario pro React Native)
+  if [ ! -d "$ANDROID_SDK/ndk" ]; then
+    log "Instalando NDK..."
+    sdkmanager "ndk;27.1.12297006" 2>&1 | tail -1
+  fi
+
+  ok "Android SDK instalado em $ANDROID_SDK"
+  echo "  ANDROID_HOME ja configurado no .zshrc"
 fi
 
 # -----------------------------------------------

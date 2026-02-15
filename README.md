@@ -16,7 +16,7 @@ Script automatizado para configurar meu ambiente de desenvolvimento no WSL (Ubun
 | **Docker** | Docker Engine |
 | **GitHub** | GitHub CLI (gh) |
 | **Ngrok** | Tunneling para expor localhost |
-| **Android** | Detecta Android SDK do Windows e configura paths |
+| **Android** | Android SDK nativo no Linux (build-tools, platform-tools, NDK) |
 | **VSCode** | Extensoes essenciais (Biome, Prisma, Tailwind, Expo, etc.) |
 
 ## Uso rapido
@@ -82,8 +82,15 @@ Instala `gh` para criar PRs, issues, etc. direto do terminal.
 ### 8. Ngrok
 Instala ngrok para expor localhost via tunnel (usado com Expo, webhooks, etc.).
 
-### 9. Android SDK (WSL → Windows)
-Detecta o Android SDK instalado no Windows e confirma que os paths estao configurados no `.zshrc`.
+### 9. Android SDK (Linux nativo)
+Instala o Android SDK direto no Linux/WSL (`~/Android/Sdk`). Inclui:
+- command-line tools + sdkmanager
+- platform-tools (adb)
+- build-tools 36.0.0
+- platform android-36
+- NDK 27.1
+
+Muito mais rapido que usar o SDK do Windows via `/mnt/c/`.
 
 ### 10. VSCode Extensions
 Instala extensoes essenciais:
