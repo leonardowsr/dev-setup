@@ -6,7 +6,8 @@ Script automatizado para configurar meu ambiente de desenvolvimento no WSL (Ubun
 
 | Categoria | Ferramentas |
 |-----------|-------------|
-| **Sistema** | git, curl, wget, build-essential e dependencias |
+| **Sistema** | git, curl, wget, build-essential, htop e dependencias |
+| **Git** | Config interativa (nome/email) + .gitignore_global |
 | **Shell** | Zsh, Oh My Zsh, plugins (autosuggestions, syntax-highlighting, autocomplete, you-should-use) |
 | **CLI modernas** | eza, zoxide, Starship |
 | **Node.js** | NVM + Node LTS + PNPM (via corepack) + Bun |
@@ -14,6 +15,7 @@ Script automatizado para configurar meu ambiente de desenvolvimento no WSL (Ubun
 | **Python** | Python 3 + uv (gerenciador moderno) |
 | **Docker** | Docker Engine |
 | **GitHub** | GitHub CLI (gh) |
+| **Ngrok** | Tunneling para expor localhost |
 | **Android** | Detecta Android SDK do Windows e configura paths |
 | **VSCode** | Extensoes essenciais (Biome, Prisma, Tailwind, Expo, etc.) |
 
@@ -45,7 +47,12 @@ Vai perguntar item por item se voce quer instalar.
 ## O que cada secao faz
 
 ### 1. Pacotes base
-Instala compiladores e libs necessarias para NVM, Python, etc.
+Instala compiladores, libs necessarias para NVM/Python e htop.
+
+### 1.5 Git config + .gitignore_global
+- Pede nome e email interativamente (nada sensivel no repo)
+- Configura `core.autocrlf=input`, `credential.helper=store`
+- Cria `.gitignore_global` com regras para `.env`, `node_modules`, `.DS_Store`, IDEs, etc.
 
 ### 2. Zsh + Oh My Zsh + Plugins
 - Instala Zsh e define como shell padrao
@@ -72,10 +79,13 @@ Instala Docker Engine e adiciona seu usuario ao grupo docker.
 ### 7. GitHub CLI
 Instala `gh` para criar PRs, issues, etc. direto do terminal.
 
-### 8. Android SDK (WSL → Windows)
+### 8. Ngrok
+Instala ngrok para expor localhost via tunnel (usado com Expo, webhooks, etc.).
+
+### 9. Android SDK (WSL → Windows)
 Detecta o Android SDK instalado no Windows e confirma que os paths estao configurados no `.zshrc`.
 
-### 9. VSCode Extensions
+### 10. VSCode Extensions
 Instala extensoes essenciais:
 - `anthropic.claude-code` — Claude Code
 - `expo.vscode-expo-tools` — Expo

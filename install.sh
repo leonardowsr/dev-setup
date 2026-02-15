@@ -52,8 +52,73 @@ sudo apt install -y \
   ca-certificates gnupg lsb-release \
   software-properties-common \
   zlib1g-dev libssl-dev libreadline-dev \
-  libffi-dev libbz2-dev libsqlite3-dev
+  libffi-dev libbz2-dev libsqlite3-dev \
+  htop
 ok "Pacotes base instalados"
+
+# -----------------------------------------------
+# 1.5 Git config + .gitignore_global
+# -----------------------------------------------
+log "Configurando Git..."
+
+if [ -z "$(git config --global user.name)" ]; then
+  read -p "  Seu nome para o Git: " git_name
+  git config --global user.name "$git_name"
+fi
+
+if [ -z "$(git config --global user.email)" ]; then
+  read -p "  Seu email para o Git: " git_email
+  git config --global user.email "$git_email"
+fi
+
+git config --global core.autocrlf input
+git config --global credential.helper store
+git config --global http.postBuffer 524288000
+
+# .gitignore_global
+GITIGNORE_GLOBAL="$HOME/.gitignore_global"
+if [ ! -f "$GITIGNORE_GLOBAL" ]; then
+  cat > "$GITIGNORE_GLOBAL" << 'GITIGNORE'
+# OS
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Editores/IDEs
+.vscode/settings.json
+.idea/
+*.swp
+*.swo
+*~
+
+# Env e secrets
+.env
+.env.*
+!.env.example
+
+# Dependencias
+node_modules/
+__pycache__/
+*.pyc
+.venv/
+
+# Build
+dist/
+build/
+*.log
+
+# Debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+GITIGNORE
+  git config --global core.excludesfile "$GITIGNORE_GLOBAL"
+  ok ".gitignore_global criado"
+else
+  ok ".gitignore_global ja existe"
+fi
+
+ok "Git configurado ($(git config --global user.name) <$(git config --global user.email)>)"
 
 # -----------------------------------------------
 # 2. Zsh + Oh My Zsh + Plugins (via dotfiles)
@@ -221,7 +286,21 @@ if should_install "GitHub CLI (gh)"; then
 fi
 
 # -----------------------------------------------
-# 8. Android SDK tools (via Windows — WSL config)
+# 8. Ngrok
+# -----------------------------------------------
+if should_install "Ngrok"; then
+  log "Instalando Ngrok..."
+
+  if ! command -v ngrok &>/dev/null; then
+    curl -sSL https://ngrok-agent.s3.amazonaws.com/ngrok-v3-stable-linux-amd64.tgz | sudo tar xz -C /usr/local/bin
+    warn "Depois de instalar, autentique com: ngrok config add-authtoken <token>"
+  else
+    ok "Ngrok ja instalado"
+  fi
+fi
+
+# -----------------------------------------------
+# 9. Android SDK tools (via Windows — WSL config)
 # -----------------------------------------------
 if should_install "Android SDK config (WSL -> Windows)"; then
   log "Configurando Android SDK..."
